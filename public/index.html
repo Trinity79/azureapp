@@ -1,30 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Tasks</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File to ZIP</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <article>
-        <h1>My tasks</h1>
-        <!-- List for tasks -->
-        <ul id="task-list"></ul>
+    <div class="container">
+        <h1>File to ZIP</h1>
+        <input type="file" id="fileInput" class="file-input">
+        <label for="fileInput" class="file-label" onclick="{color_change}">Choose File</label>
+        <button id="compressButton" class="compress-button">Compress and Download</button>
+        <a href="index1.html" class="page">Go to Encryption Page</a>
+    </div>
 
-        <div>
-            <label for="name">Title: </label><input type="text" id="task-title" />
-        </div>
-        <div>
-            <button type="button" id="task-register">Add task</button>
-        </div>
-    </article>
-    <script src="./local-index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script>
+        function color_change() {
+            // document.getElementById("compressButton").style.backgroundColor = "red";
+        }
+        const fileInput = document.getElementById('fileInput');
+        const compressButton = document.getElementById('compressButton');
+
+        compressButton.addEventListener('click', () => {
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file to compress.');
+                return;
+            }
+
+            const zip = new JSZip();
+            zip.file(file.name, file);
+            zip.generateAsync({ type: 'blob' })
+                .then((content) => {
+                    saveAs(content, `${file.name}.zip`);
+
+                })
+                .catch((error) => {
+                    console.error('Error generating ZIP file:', error);
+                });
+
+                // window.location.replace("http://127.0.0.1:5500/index1.html");
+        });
+    </script>
 </body>
 
 </html>
